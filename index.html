@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monuku Runner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div id="loading-screen">
+            <h2>Loading Game Assets...</h2>
+            <div class="loading-bar">
+                <div id="loading-progress"></div>
+            </div>
+            <p>Press SPACE or TAP to jump over rocks!</p>
+            <p style="font-size: 14px; margin-top: 5px;">Tip: Fast-paced running! Time your jumps carefully!</p>
+        </div>
+        <div id="score">Score: 0</div>
+        <div class="game-area">
+            <div class="clouds">
+                <img src="Assets/cloud 1.png" class="cloud cloud1" alt="Cloud">
+                <img src="Assets/cloud 2.png" class="cloud cloud2" alt="Cloud">
+                <img src="Assets/cloud 3.png" class="cloud cloud3" alt="Cloud">
+            </div>
+            <div id="character"></div>
+            <div class="ground">
+                <img src="Assets/Platform.png" class="platform" alt="Platform">
+            </div>
+        </div>
+        <div id="game-over" class="hidden">
+            <h2>Game Over</h2>
+            <p id="final-score">Your score: 0</p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 

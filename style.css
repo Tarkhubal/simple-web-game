@@ -1,0 +1,385 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 10px;
+    background-color: #87CEEB;
+    box-sizing: border-box;
+    /* Safari performance optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.game-container {
+    position: relative;
+    width: min(90vw, 1400px); /* Larger responsive width with higher max limit */
+    height: min(70vh, 700px); /* Larger responsive height with higher max limit */
+    min-width: 400px; /* Increased minimum width */
+    min-height: 300px; /* Increased minimum height */
+    overflow: hidden;
+    border: 3px solid #333; /* Thicker border for bigger game */
+    border-radius: 8px; /* Slightly larger border radius */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+}
+
+.game-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: auto;
+    overflow: hidden;
+}
+
+#character {
+    position: absolute;
+    bottom: 45px;
+    left: 8%;
+    width: 10%; /* Reduced from 15% for better proportions */
+    height: 22%; /* Reduced from 30% for better proportions */
+    min-width: 70px;
+    min-height: 90px;
+    max-width: 140px;
+    max-height: 160px;
+    background-image: url('Character Sprites /run.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 10;
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 12%; /* Increased from 10% for bigger landscape */
+    min-height: 60px; /* Increased from 45px for bigger ground */
+    overflow: hidden;
+}
+
+.platform {
+    position: absolute;
+    bottom: 0;
+    width: 300%;
+    height: 100%;
+    background-image: url('Assets/Platform.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center bottom;
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+.obstacle {
+    position: absolute;
+    bottom: 45px;
+    width: 6%; /* Reduced to match smaller character */
+    height: 10%;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 90px;
+    max-height: 90px;
+    background-image: url('Assets/Rock 1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    z-index: 5;
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.coin {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ffd700;
+    border-radius: 50%;
+    border: 1px solid #ffb347;
+    z-index: 5;
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.clouds {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.cloud {
+    position: absolute;
+    opacity: 0.8;
+    /* Safari performance optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+.cloud1 {
+    top: 8%; /* Responsive positioning */
+    width: 12%; /* Increased from 8% for bigger clouds */
+    min-width: 100px; /* Increased minimum size */
+    max-width: 160px; /* Increased maximum size */
+    animation: moveCloud 25s linear infinite;
+}
+
+.cloud2 {
+    top: 15%; /* Responsive positioning */
+    width: 15%; /* Increased from 10% for bigger clouds */
+    min-width: 120px; /* Increased minimum size */
+    max-width: 200px; /* Increased maximum size */
+    animation: moveCloud 35s linear infinite;
+    animation-delay: 5s;
+}
+
+.cloud3 {
+    top: 5%; /* Responsive positioning */
+    width: 10%; /* Increased from 7% for bigger clouds */
+    min-width: 80px; /* Increased minimum size */
+    max-width: 140px; /* Increased maximum size */
+    animation: moveCloud 30s linear infinite;
+    animation-delay: 10s;
+}
+
+@keyframes moveCloud {
+    0% {
+        left: 100%; /* Start from right edge */
+    }
+    100% {
+        left: -15%; /* Move off left edge */
+    }
+}
+
+#score {
+    position: absolute;
+    top: 15px; /* Slightly more spacing */
+    right: 15px; /* Slightly more spacing */
+    padding: 8px 15px; /* Increased padding */
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque */
+    border-radius: 8px; /* Bigger border radius */
+    font-weight: bold;
+    font-size: 18px; /* Bigger font size */
+    z-index: 20;
+}
+
+#game-over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly more opaque */
+    color: white;
+    text-align: center;
+    z-index: 100;
+}
+
+#game-over h2 {
+    font-size: 32px; /* Bigger game over text */
+    margin-bottom: 15px;
+}
+
+#game-over p {
+    font-size: 20px; /* Bigger score text */
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#restart-button {
+    margin-top: 25px; /* More spacing */
+    padding: 15px 30px; /* Bigger button */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px; /* Bigger border radius */
+    cursor: pointer;
+    font-size: 18px; /* Bigger font */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#restart-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Slight hover effect */
+}
+
+.jump {
+    animation: jump 0.5s ease-out; /* Realistic jump timing with natural curve */
+}
+
+@keyframes jump {
+    0% {
+        bottom: 45px; /* Start position */
+    }
+    50% {
+        bottom: 220px; /* Higher jump to clear bigger rocks */
+    }
+    100% {
+        bottom: 45px; /* Return to start position */
+    }
+} 
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+    
+    .game-container {
+        width: 95vw; /* More width on tablets */
+        height: 60vh; /* More height on tablets */
+        min-height: 400px; /* Increased minimum for bigger game */
+    }
+    
+    #character {
+        width: 12%; /* Reduced for better mobile proportions */
+        height: 24%;
+        bottom: 45px;
+        min-width: 80px;
+        min-height: 100px;
+    }
+    
+    .obstacle {
+        width: 8%; /* Reduced to match smaller character */
+        height: 12%;
+        bottom: 45px;
+        min-width: 50px;
+        min-height: 50px;
+    }
+    
+    #score {
+        font-size: 16px; /* Bigger score text */
+        padding: 5px 12px; /* More padding */
+    }
+    
+    .loading-bar {
+        width: 350px; /* Bigger loading bar on mobile */
+    }
+    
+    #loading-screen h2 {
+        font-size: 24px; /* Bigger text */
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        width: 100vw;
+        height: 55vh; /* More height on small screens */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        min-height: 350px; /* Increased minimum */
+    }
+    
+    #character {
+        width: 14%; /* Reduced for better small screen proportions */
+        height: 26%;
+        bottom: 45px;
+        min-width: 90px;
+        min-height: 110px;
+    }
+    
+    .obstacle {
+        width: 10%; /* Reduced to match smaller character */
+        height: 14%;
+        bottom: 45px;
+        min-width: 60px;
+        min-height: 60px;
+    }
+    
+    .loading-bar {
+        width: 300px; /* Bigger loading bar */
+    }
+    
+    #loading-screen h2 {
+        font-size: 22px; /* Bigger text */
+    }
+    
+    #loading-screen p {
+        font-size: 15px; /* Bigger text */
+    }
+} 
+
+#loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(135, 206, 235, 0.95);
+    color: #333;
+    text-align: center;
+    z-index: 1000;
+}
+
+.loading-bar {
+    width: 400px; /* Bigger loading bar */
+    height: 25px; /* Taller loading bar */
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px; /* Bigger border radius */
+    margin: 25px 0; /* More spacing */
+    overflow: hidden;
+}
+
+#loading-progress {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+#loading-screen h2 {
+    margin-bottom: 15px;
+    font-size: 28px; /* Bigger text */
+    font-weight: bold;
+}
+
+#loading-screen p {
+    margin-top: 15px;
+    font-size: 16px; /* Bigger text */
+    opacity: 0.8;
+} 
