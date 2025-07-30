@@ -13,20 +13,20 @@ const CACHE_BUSTER = '?v=' + Date.now();
 const debugCollisions = false;
 
 // Rock and flower assets
-const rockAssets = ['Assets/Rock 1.png', 'Assets/Rock 2.png', 'Assets/Rock 3.png'];
-const flowerAssets = ['Assets/flower 1.png', 'Assets/flower 2.png'];
+const rockAssets = ['assets/rock_1.png', 'assets/rock_2.png', 'assets/rock_3.png'];
+const flowerAssets = ['assets/flower_1.png', 'assets/flower_2.png'];
 
 // Preload all assets
 const assetsToLoad = [
     ...rockAssets,
     ...flowerAssets,
-    'Assets/Platform.png',
-    'Assets/Cloud 1.png',
-    'Assets/Cloud 2.png',
-    'Assets/Cloud 3.png',
-    'Assets/Cloud-catball.png',
-    'Assets/Cloud-liquina.png',
-    'Character Sprites/run.gif'
+    'assets/platform.png',
+    'assets/cloud_1.png',
+    'assets/cloud_2.png',
+    'assets/cloud_3.png',
+    'assets/cloud_catball.png',
+    'assets/cloud_liquina.png',
+    'character_sprites/run.gif'
 ];
 
 let assetsLoaded = 0;
@@ -364,11 +364,11 @@ function createObstacle() {
     }
     
     let size;
-    if (randomRock.includes('Rock 1.png')) {
+    if (randomRock.includes('rock_1.png')) {
         size = Math.min(baseSize * 1.5 * sizeMultiplier, 100); // Even bigger Rock 1
-    } else if (randomRock.includes('Rock 2.png')) {
+    } else if (randomRock.includes('rock_2.png')) {
         size = Math.min(baseSize * 1.2 * sizeMultiplier, 80); // Even bigger Rock 2
-    } else if (randomRock.includes('Rock 3.png')) {
+    } else if (randomRock.includes('rock_3.png')) {
         size = Math.min(baseSize * 0.9 * sizeMultiplier, 60); // Even bigger Rock 3
     }
     
