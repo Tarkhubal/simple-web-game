@@ -57,7 +57,7 @@ body {
     min-height: 90px;
     max-width: 140px;
     max-height: 160px;
-    background-image: url('Character Sprites /run.gif');
+    background-image: url('Character Sprites/run.gif');
     background-size: cover;
     background-repeat: no-repeat;
     z-index: 10;

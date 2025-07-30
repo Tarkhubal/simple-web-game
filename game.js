@@ -6,6 +6,9 @@ const gameOverScreen = document.getElementById('game-over');
 const finalScoreDisplay = document.getElementById('final-score');
 const restartButton = document.getElementById('restart-button');
 
+// cache buster for assets
+const CACHE_BUSTER = '?v=' + Date.now();
+
 // Debug mode - set to true to see collision areas (for development)
 const debugCollisions = false;
 
@@ -18,12 +21,12 @@ const assetsToLoad = [
     ...rockAssets,
     ...flowerAssets,
     'Assets/Platform.png',
-    'Assets/cloud 1.png',
-    'Assets/cloud 2.png',
-    'Assets/cloud 3.png',
-    'Assets/cloud-catball.png',
+    'Assets/Cloud 1.png',
+    'Assets/Cloud 2.png',
+    'Assets/Cloud 3.png',
+    'Assets/Cloud-catball.png',
     'Assets/Cloud-liquina.png',
-    'Character Sprites /run.gif'
+    'Character Sprites/run.gif'
 ];
 
 let assetsLoaded = 0;
@@ -75,7 +78,7 @@ function preloadAssets() {
                 }, 500);
             }
         };
-        img.src = src;
+        img.src = src + CACHE_BUSTER;
     });
 }
 
@@ -348,7 +351,7 @@ function createObstacle() {
     
     // Random rock asset
     const randomRock = rockAssets[Math.floor(Math.random() * rockAssets.length)];
-    obstacle.style.backgroundImage = `url('${randomRock}')`;
+    obstacle.style.backgroundImage = `url('${randomRock}${CACHE_BUSTER}')`;
     
     // Responsive rock sizes - even bigger for new images
     const containerWidth = gameArea.offsetWidth;

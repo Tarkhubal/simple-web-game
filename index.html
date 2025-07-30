@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        // cache buster for dev
+        const links = document.querySelectorAll('link[rel="stylesheet"]');
+        links.forEach(link => {
+            link.href = link.href + '?v=' + Date.now();
+        });
+    </script>
     <div class="game-container">
         <div id="loading-screen">
             <h2>Loading Game Assets...</h2>
@@ -19,10 +26,10 @@
         <div id="score">Score: 0</div>
         <div class="game-area">
             <div class="clouds">
-                <img src="Assets/cloud 1.png" class="cloud cloud1" alt="Cloud">
-                <img src="Assets/cloud 2.png" class="cloud cloud2" alt="Cloud">
-                <img src="Assets/cloud 3.png" class="cloud cloud3" alt="Cloud">
-                <img src="Assets/cloud-catball.png" class="cloud cloud4" alt="Cloud">
+                <img src="Assets/Cloud 1.png" class="cloud cloud1" alt="Cloud">
+                <img src="Assets/Cloud 2.png" class="cloud cloud2" alt="Cloud">
+                <img src="Assets/Cloud 3.png" class="cloud cloud3" alt="Cloud">
+                <img src="Assets/Cloud-catball.png" class="cloud cloud4" alt="Cloud">
                 <img src="Assets/Cloud-liquina.png" class="cloud cloud5" alt="Cloud">
             </div>
             <div id="character"></div>
@@ -36,6 +43,11 @@
             <button id="restart-button">Play Again</button>
         </div>
     </div>
-    <script src="game.js"></script>
+    <script>
+        // cache buster for js
+        const script = document.createElement('script');
+        script.src = 'game.js?v=' + Date.now();
+        document.body.appendChild(script);
+    </script>
 </body>
 </html> 
