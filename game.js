@@ -6,6 +6,38 @@ const gameOverScreen = document.getElementById('game-over');
 const finalScoreDisplay = document.getElementById('final-score');
 const restartButton = document.getElementById('restart-button');
 
+// ========================================
+// GAME CONFIG - modify these values to change game difficulty
+// ========================================
+const GAME_CONFIG = {
+    // initial game speed (pixels per frame) - higher = faster
+    INITIAL_SPEED: 8,
+    
+    // speed increase every 15 seconds - higher = faster acceleration
+    SPEED_INCREASE: 0.3,
+    
+    // max speed limit - prevents game from becoming unplayable
+    MAX_SPEED: 12,
+    
+    // obstacle spawn interval in ms - lower = more obstacles
+    INITIAL_OBSTACLE_INTERVAL: 2600,
+    
+    // min obstacle interval - prevents too many obstacles
+    MIN_OBSTACLE_INTERVAL: 1600,
+    
+    // coin spawn interval in ms - lower = more coins
+    INITIAL_COIN_INTERVAL: 3000,
+    
+    // min coin interval
+    MIN_COIN_INTERVAL: 2000,
+    
+    // interval reduction per speed increase (makes obstacles/coins appear faster)
+    INTERVAL_REDUCTION: 50,
+    
+    // time between speed increases in ms (15 seconds)
+    SPEED_INCREASE_INTERVAL: 15000
+};
+
 // cache buster for assets
 const CACHE_BUSTER = '?v=' + Date.now();
 
@@ -200,15 +232,15 @@ function returnEffectToPool(effect) {
 let isJumping = false;
 let isGameOver = false;
 let score = 0;
-let gameSpeed = 5;
+let gameSpeed = GAME_CONFIG.INITIAL_SPEED;
 let groundPosition = 0;
 let lastObstacleTime = 0;
 let lastCoinTime = 0;
 let lastScoreTime = 0;
 let lastSpeedIncreaseTime = 0;
 let gameStartTime = 0;
-let obstacleInterval = 2200;
-let coinInterval = 3000;
+let obstacleInterval = GAME_CONFIG.INITIAL_OBSTACLE_INTERVAL;
+let coinInterval = GAME_CONFIG.INITIAL_COIN_INTERVAL;
 
 // Event listeners
 document.addEventListener('keydown', jump);
@@ -232,9 +264,9 @@ function startGame() {
     
     isGameOver = false;
     score = 0;
-    gameSpeed = 6; // Increased for faster running
-    obstacleInterval = 2600; // Keep good spacing between rocks
-    coinInterval = 3000;
+    gameSpeed = GAME_CONFIG.INITIAL_SPEED;
+    obstacleInterval = GAME_CONFIG.INITIAL_OBSTACLE_INTERVAL;
+    coinInterval = GAME_CONFIG.INITIAL_COIN_INTERVAL;
     groundPosition = 0;
     gameStartTime = performance.now();
     lastObstacleTime = gameStartTime;
@@ -267,13 +299,23 @@ function animateGame() {
     // Animate ground
     animateGround();
     
-         // Update game speed every 15 seconds
-     if (currentTime - lastSpeedIncreaseTime >= 15000) {
-         gameSpeed += 0.3; // Slightly slower speed increase
-         obstacleInterval = Math.max(obstacleInterval - 50, 1600); // Don't get too fast
-         coinInterval = Math.max(coinInterval - 50, 2000);
-         lastSpeedIncreaseTime = currentTime;
-     }
+    // update game speed based on config
+    if (currentTime - lastSpeedIncreaseTime >= GAME_CONFIG.SPEED_INCREASE_INTERVAL) {
+        // increase speed but cap at max
+        gameSpeed = Math.min(gameSpeed + GAME_CONFIG.SPEED_INCREASE, GAME_CONFIG.MAX_SPEED);
+        
+        // reduce intervals to spawn obstacles/coins faster
+        obstacleInterval = Math.max(
+            obstacleInterval - GAME_CONFIG.INTERVAL_REDUCTION, 
+            GAME_CONFIG.MIN_OBSTACLE_INTERVAL
+        );
+        coinInterval = Math.max(
+            coinInterval - GAME_CONFIG.INTERVAL_REDUCTION, 
+            GAME_CONFIG.MIN_COIN_INTERVAL
+        );
+        
+        lastSpeedIncreaseTime = currentTime;
+    }
     
     // Create obstacles based on timing and spacing
     if (currentTime - lastObstacleTime >= obstacleInterval) {
@@ -353,23 +395,23 @@ function createObstacle() {
     const randomRock = rockAssets[Math.floor(Math.random() * rockAssets.length)];
     obstacle.style.backgroundImage = `url('${randomRock}${CACHE_BUSTER}')`;
     
-    // Responsive rock sizes - even bigger for new images
+    // Responsive rock sizes - bigger for better visibility
     const containerWidth = gameArea.offsetWidth;
-    let baseSize = Math.max(32, containerWidth * 0.045); // Even bigger base size
+    let baseSize = Math.max(40, containerWidth * 0.055); // increased base size
     
     // Early game assistance
     let sizeMultiplier = 1;
     if (score < 20) {
-        sizeMultiplier = 0.75; // Less reduction since we need bigger rocks
+        sizeMultiplier = 0.85; // less reduction for early game
     }
     
     let size;
     if (randomRock.includes('rock_1.png')) {
-        size = Math.min(baseSize * 1.5 * sizeMultiplier, 100); // Even bigger Rock 1
+        size = Math.min(baseSize * 1.7 * sizeMultiplier, 120); // bigger Rock 1
     } else if (randomRock.includes('rock_2.png')) {
-        size = Math.min(baseSize * 1.2 * sizeMultiplier, 80); // Even bigger Rock 2
+        size = Math.min(baseSize * 1.4 * sizeMultiplier, 100); // bigger Rock 2
     } else if (randomRock.includes('rock_3.png')) {
-        size = Math.min(baseSize * 0.9 * sizeMultiplier, 60); // Even bigger Rock 3
+        size = Math.min(baseSize * 1.1 * sizeMultiplier, 80); // bigger Rock 3
     }
     
     obstacle.style.height = `${size}px`;
