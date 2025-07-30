@@ -96,7 +96,7 @@ body {
 
 .obstacle {
     position: absolute;
-    bottom: 45px;
+    bottom: 35px; /* Lower to sit properly on platform */
     width: 6%; /* Reduced to match smaller character */
     height: 10%;
     min-width: 40px;
@@ -172,6 +172,24 @@ body {
     max-width: 140px; /* Increased maximum size */
     animation: moveCloud 30s linear infinite;
     animation-delay: 10s;
+}
+
+.cloud4 {
+    top: 12%; /* Position between other clouds */
+    width: 13%; /* Slightly different size */
+    min-width: 90px;
+    max-width: 170px;
+    animation: moveCloud 40s linear infinite;
+    animation-delay: 15s;
+}
+
+.cloud5 {
+    top: 3%; /* Higher in the sky */
+    width: 11%; /* Different size for variety */
+    min-width: 85px;
+    max-width: 150px;
+    animation: moveCloud 35s linear infinite;
+    animation-delay: 25s;
 }
 
 @keyframes moveCloud {
@@ -282,7 +300,7 @@ body {
     .obstacle {
         width: 8%; /* Reduced to match smaller character */
         height: 12%;
-        bottom: 45px;
+        bottom: 35px; /* Lower to sit properly on platform */
         min-width: 50px;
         min-height: 50px;
     }
@@ -322,7 +340,7 @@ body {
     .obstacle {
         width: 10%; /* Reduced to match smaller character */
         height: 14%;
-        bottom: 45px;
+        bottom: 35px; /* Lower to sit properly on platform */
         min-width: 60px;
         min-height: 60px;
     }

@@ -21,6 +21,8 @@ const assetsToLoad = [
     'Assets/cloud 1.png',
     'Assets/cloud 2.png',
     'Assets/cloud 3.png',
+    'Assets/cloud-catball.png',
+    'Assets/Cloud-liquina.png',
     'Character Sprites /run.gif'
 ];
 
@@ -348,29 +350,29 @@ function createObstacle() {
     const randomRock = rockAssets[Math.floor(Math.random() * rockAssets.length)];
     obstacle.style.backgroundImage = `url('${randomRock}')`;
     
-    // Responsive rock sizes - balanced for moderate challenge
+    // Responsive rock sizes - even bigger for new images
     const containerWidth = gameArea.offsetWidth;
-    let baseSize = Math.max(22, containerWidth * 0.03); // Balanced base size
+    let baseSize = Math.max(32, containerWidth * 0.045); // Even bigger base size
     
     // Early game assistance
     let sizeMultiplier = 1;
     if (score < 20) {
-        sizeMultiplier = 0.65; // Smaller rocks for longer in early game
+        sizeMultiplier = 0.75; // Less reduction since we need bigger rocks
     }
     
     let size;
     if (randomRock.includes('Rock 1.png')) {
-        size = Math.min(baseSize * 1.3 * sizeMultiplier, 75); // Main challenge rock
+        size = Math.min(baseSize * 1.5 * sizeMultiplier, 100); // Even bigger Rock 1
     } else if (randomRock.includes('Rock 2.png')) {
-        size = Math.min(baseSize * 0.7 * sizeMultiplier, 45); // Medium rock - balanced
+        size = Math.min(baseSize * 1.2 * sizeMultiplier, 80); // Even bigger Rock 2
     } else if (randomRock.includes('Rock 3.png')) {
-        size = Math.min(baseSize * 0.55 * sizeMultiplier, 35); // Smaller rock - still jumpable
+        size = Math.min(baseSize * 0.9 * sizeMultiplier, 60); // Even bigger Rock 3
     }
     
     obstacle.style.height = `${size}px`;
     obstacle.style.width = `${size}px`;
     obstacle.style.left = `${containerWidth}px`;
-    obstacle.style.bottom = '45px';
+    obstacle.style.bottom = '35px'; // Lower so rocks sit on the platform
     obstacle.style.display = 'block';
     obstacle.style.transform = 'translateX(0px)'; // Initialize transform
     
@@ -515,29 +517,41 @@ function checkCollision(obstacle) {
     
     const obstacleRect = obstacle.getBoundingClientRect();
     
-    // More precise collision detection that accounts for transparent areas and bigger character
-    // Reduce the effective collision area to only the visible rock part
-    const rockCollisionBuffer = isHighJump ? 35 : 25; // More forgiving during high jumps
-    const characterCollisionBuffer = isHighJump ? 25 : 15; // More forgiving during high jumps
+    // Very precise collision detection for actual rock pixels only
+    // Get the rock image size to calculate accurate collision area
+    const rockWidth = parseInt(obstacle.style.width) || 50;
+    const rockHeight = parseInt(obstacle.style.height) || 50;
     
-    // Calculate the actual visible rock area (center portion of the container)
-    const rockLeft = obstacleRect.left + rockCollisionBuffer;
-    const rockRight = obstacleRect.right - rockCollisionBuffer;
-    const rockTop = obstacleRect.top + (rockCollisionBuffer * 0.5); // Less buffer on top
-    const rockBottom = obstacleRect.bottom - 2; // Minimal buffer on bottom
+    // Create much smaller collision box that only covers the solid rock part
+    // Most rocks have significant transparent padding, so use only 35-45% of image
+    const rockCollisionWidth = rockWidth * 0.35;
+    const rockCollisionHeight = rockHeight * 0.45;
     
-    // Character collision area with small buffer
-    const charLeft = characterRect.left + characterCollisionBuffer;
-    const charRight = characterRect.right - characterCollisionBuffer;
-    const charTop = characterRect.top + characterCollisionBuffer;
-    const charBottom = characterRect.bottom - characterCollisionBuffer;
+    // Position collision box at bottom-center of image (where most rocks sit)
+    const rockCenterX = obstacleRect.left + (obstacleRect.width / 2);
+    const rockBottomY = obstacleRect.bottom - (rockHeight * 0.15); // Closer to actual bottom
+    
+    const rockLeft = rockCenterX - (rockCollisionWidth / 2);
+    const rockRight = rockCenterX + (rockCollisionWidth / 2);
+    const rockTop = rockBottomY - rockCollisionHeight;
+    const rockBottom = rockBottomY;
+    
+    // Extra forgiving collision during high jumps
+    const jumpForgiveness = isHighJump ? 8 : 3;
+    
+    // Character collision area - very forgiving
+    const characterCollisionBuffer = isHighJump ? 12 : 8; // Bigger buffer for character
+    const charLeft = characterRect.left + characterCollisionBuffer + jumpForgiveness;
+    const charRight = characterRect.right - characterCollisionBuffer - jumpForgiveness;
+    const charTop = characterRect.top + characterCollisionBuffer + jumpForgiveness;
+    const charBottom = characterRect.bottom - characterCollisionBuffer - jumpForgiveness;
     
     // Debug visualization (only if debug mode is enabled)
     if (debugCollisions) {
         // Remove any existing debug visuals
         document.querySelectorAll('.debug-collision').forEach(el => el.remove());
         
-        // Show actual collision area for rock
+        // Show actual collision area for rock (only the rock shape)
         const rockDebug = document.createElement('div');
         rockDebug.className = 'debug-collision';
         rockDebug.style.position = 'absolute';
@@ -546,7 +560,7 @@ function checkCollision(obstacle) {
         rockDebug.style.width = `${rockRight - rockLeft}px`;
         rockDebug.style.height = `${rockBottom - rockTop}px`;
         rockDebug.style.border = '2px solid red';
-        rockDebug.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+        rockDebug.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
         rockDebug.style.zIndex = '20';
         rockDebug.style.pointerEvents = 'none';
         document.body.appendChild(rockDebug);
